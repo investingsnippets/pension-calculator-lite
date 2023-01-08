@@ -32,13 +32,11 @@ The default options are not a recommendation or financial advice but just an exa
 > Note: None of the personal information provided to the calculator is saved in any way! The information will be lost when you refresh the page.
 
 Follow along each section below and enjoy the journey!
-
 """
 
 st.header("**Current Financial Situation**")
 
 """
-
 We will start with the basic information about you. First, the date of birth. That is, because we will base all our calculations on this date.
 
 Imagine that, when you decide to go on retirement, the date this will happen will most probably be your birtday celebration at that age.
@@ -46,7 +44,6 @@ Imagine that, when you decide to go on retirement, the date this will happen wil
 We will also need to keep track of the amount you currently have in your pension account. This is the balance you have managed to accumulate so far.
 We will assume that this balance is as of your last birthday. It will help with our calculations. In the next, more advanced, version of this calculator
 we will be more specific about the amounts. For now, it is just enough.
-
 """
 
 personalInfo, expectations = st.columns(2)
@@ -77,7 +74,6 @@ terminal_date = birth_date + relativedelta(years=life_expectancy)
 count_down_years = terminal_date.year - retirement_date.year
 
 st.markdown(f"""
-
 You were born {birth_date} and you celebrated your most recent birthday on {most_resent_birthday}.
 You plan to retire on {retirement_date} and eventually die (what a plan heh? :sweat_smile:) sometime in year {terminal_date}!
 
@@ -93,7 +89,7 @@ retirement today! Based on the cost of living today, how much money per month yo
 It is important to understand that due to the time value of money, 1\$ today costs more than 1\$ in a year from now. This is due to inflation.
 For example with an inflation of say 10% the same product that you bought for 1\$ today, you will buy it for 1.1\$ in a year.
 
-Same goes for pension. 1\$ today will be {1*(1+0.05)**years_to_retirement:.2f}\$ when you retire :dizzy_face:!
+Same goes for pension. 1\$ today, with an annual inflation of 5%, will be worth {1*(1+0.05)**years_to_retirement - 1:.2f}\$ when you retire :dizzy_face:!
 
 Try it ...
 """)
