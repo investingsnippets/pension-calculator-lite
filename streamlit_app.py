@@ -77,6 +77,7 @@ terminal_date = birth_date + relativedelta(years=life_expectancy)
 count_down_years = terminal_date.year - retirement_date.year
 
 st.markdown(f"""
+
 You were born {birth_date} and you celebrated your most recent birthday on {most_resent_birthday}.
 You plan to retire on {retirement_date} and eventually die (what a plan heh? :sweat_smile:) sometime in year {terminal_date}!
 
