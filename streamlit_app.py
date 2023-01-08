@@ -82,9 +82,12 @@ You have {years_to_retirement} years until you retire, and from that point on {c
 As of {most_resent_birthday} you have saved a total of {initial_amount_for_pension}.
 
 Let's move to the next section and try to understand what happens when you are in pension.
+""")
 
-You will be asked to fill some fields. The most important one is the `Monthly pension withdrawal` field. Imagine that you were going into
-retirement today! Based on the cost of living today, how much money per month you would be happy with. Do not account for taxes or anything else.
+st.header("**While In Pension**")
+st.markdown(f"""
+You are asked to fill some fields. The most important one is the `Monthly pension withdrawal` field. Imagine that you were going into
+retirement today! Based on the cost of living today, how much money per month would you be happy living with? (Do not account for taxes or anything else)
 
 It is important to understand that due to the time value of money, 1\$ today costs more than 1\$ in a year from now. This is due to inflation.
 For example with an inflation of say 10% the same product that you bought for 1\$ today, you will buy it for 1.1\$ in a year.
@@ -93,8 +96,6 @@ Same goes for pension. 1\$ today, with an annual inflation of 5%, will be worth 
 
 Try it ...
 """)
-
-st.header("**While In Pension**")
 colPostForecast1, colPostForecast2 = st.columns(2)
 
 with colPostForecast1:
