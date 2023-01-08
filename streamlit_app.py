@@ -89,7 +89,7 @@ retirement today! Based on the cost of living today, how much money per month yo
 It is important to understand that due to the time value of money, 1\$ today costs more than 1\$ in a year from now. This is due to inflation.
 For example with an inflation of say 10% the same product that you bought for 1\$ today, you will buy it for 1.1\$ in a year.
 
-Same goes for pension. 1\$ today will be {1*(1+0.05)**years_to_retirement}\$ when you retire :dizzy_face:!
+Same goes for pension. 1\$ today will be {1*(1+0.05)**years_to_retirement:.2f}\$ when you retire :dizzy_face:!
 
 Try it ...
 """)
