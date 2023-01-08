@@ -287,6 +287,19 @@ fig.update_yaxes(title_text="Amount", row=1, col=1)
 fig.update_yaxes(title_text="Amount", row=2, col=1)
 st.plotly_chart(fig, use_container_width=True, theme="streamlit")
 
+st.header("**Conclusion**")
+
+st.markdown(f"""I really hope you liked the calculator so far! 
+
+The next phase of such a simulation is to allow for variable market, inflation and growth rates.
+This way, we can model different scenarios and plan even better.
+My aspiration is to create the next version soon!
+
+If you liked the content so far, buy me a coffee :wink:
+
+Enjoy!
+""")
+
 html_buy_me_coffee = """<a href="https://www.buymeacoffee.com/invsnippets"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=invsnippets&button_colour=6f8eec&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00" /></a>"""
 
 st.markdown(html_buy_me_coffee, unsafe_allow_html=True)
