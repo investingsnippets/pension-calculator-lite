@@ -39,7 +39,7 @@ st.header("**Current Financial Situation**")
 """
 We will start with the basic information about you. First, the date of birth. That is, because we will base all our calculations on this date.
 
-Imagine that, when you decide to go on retirement, the date this will happen will most probably be your birtday celebration at that age.
+Imagine that, when you decide to go on retirement, the date this will happen will most probably be your birthday celebration at that age.
 
 We will also need to keep track of the amount you currently have in your pension account. This is the balance you have managed to accumulate so far.
 We will assume that this balance is as of your last birthday. It will help with our calculations. In the next, more advanced, version of this calculator
