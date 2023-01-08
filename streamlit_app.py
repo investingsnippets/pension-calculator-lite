@@ -32,11 +32,13 @@ The default options are not a recommendation or financial advice but just an exa
 > Note: None of the personal information provided to the calculator is saved in any way! The information will be lost when you refresh the page.
 
 Follow along each section below and enjoy the journey!
+
 """
 
 st.header("**Current Financial Situation**")
 
 """
+
 We will start with the basic information about you. First, the date of birth. That is, because we will base all our calculations on this date.
 
 Imagine that, when you decide to go on retirement, the date this will happen will most probably be your birtday celebration at that age.
@@ -74,7 +76,8 @@ years_to_retirement = retirement_date.year - most_resent_birthday.year
 terminal_date = birth_date + relativedelta(years=life_expectancy)
 count_down_years = terminal_date.year - retirement_date.year
 
-st.markdown(f"""You were born {birth_date} and you celebrated your most recent birthday on {most_resent_birthday}.
+st.markdown(f"""
+You were born {birth_date} and you celebrated your most recent birthday on {most_resent_birthday}.
 You plan to retire on {retirement_date} and eventually die (what a plan heh? :sweat_smile:) sometime in year {terminal_date}!
 
 You have {years_to_retirement} years until you retire, and from that point on {count_down_years} until the end of your pension plan.
@@ -142,7 +145,8 @@ for year in pension_balance.index:
 # assert (pension_balance.Balance[-2] * (1+market_rate_post_retirement)).round(6) == pension_balance.InflatedOutflow[-1].round(6)
 
 
-st.markdown(f"""With today's cost of living standards, you would feel comfortable with a monthly pension payment of {monthly_cost_now_net}.
+st.markdown(f"""
+With today's cost of living standards, you would feel comfortable with a monthly pension payment of {monthly_cost_now_net}.
 That is an annual cost in today's terms of {annual_cost_now_net}.
 
 With an inflation rate at {inf_annual_post*100.0:.2f}% the net amount you will need as a first pension salary is {monthly_needed_at_retirement_net:.2f}.
@@ -217,7 +221,8 @@ for year in pre_pension_balance.index:
 
 # assert pension_balance.Balance[0].round(2) + pension_balance.InflatedOutflow[0].round(2) == pre_pension_balance.Balance[-1].round(2) # The balance we have in the account when we first get into pension is after we have taken out the first pension payment 
 
-st.markdown(f"""Well well, we know that just the day before {retirement_date} we will need to have a total of {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f} in our
+st.markdown(f"""
+Well well, we know that just the day before {retirement_date} we will need to have a total of {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f} in our
 pension account (Just the exact {retirement_date} we withdraw the first pension annual amount of {pension_balance.InflatedOutflow[0]:.2f} and we are left with {pension_balance.Balance[0]:.2f}). To achieve that, we need to be investing. We will do that by placing our money in an investment account which we estimate it will return an annual rate of
 {market_rate_pre_retirement*100.0:.2f}%. We also think that we should be growing our annual deposits to the pension account to account for the inflation (mostly).
 This growth is at {growth_pre_retirement*100:.2f}% per year.
@@ -228,7 +233,8 @@ and retire properly at {retirement_date}.
 
 However, we only have {initial_amount_for_pension} and in order to reach our target, we need to be depositing (and probably growing) to our account.
 
-So far, we have to be depositing {initial_annual_deposit_amount/12:.2f} ({initial_annual_deposit_amount:.2f} annual) per month to our account and each turn of the year we should be growing that amount by {growth_pre_retirement*100:.2f}%. 
+So far, we have to be depositing {initial_annual_deposit_amount/12:.2f} ({initial_annual_deposit_amount:.2f} annual) per month to our account and each turn of the year we should be growing that amount by {growth_pre_retirement*100:.2f}%.
+
 """)
 
 fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
