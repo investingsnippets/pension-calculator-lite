@@ -77,7 +77,7 @@ st.markdown(f"""
 You were born {birth_date} and you celebrated your most recent birthday on {most_resent_birthday}.
 You plan to retire on {retirement_date} and eventually die (what a plan heh? :sweat_smile:) sometime in year {terminal_date}!
 
-You have {years_to_retirement} years until you retire, and from that point on {count_down_years} until the end of your pension plan.
+You have {years_to_retirement} years until you retire, and from that point on {count_down_years} years more until the end of your pension plan.
 
 As of {most_resent_birthday} you have saved a total of {initial_amount_for_pension}.
 
