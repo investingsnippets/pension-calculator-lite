@@ -239,7 +239,7 @@ and retire properly at {retirement_date}.
 However, you already have {initial_amount_for_pension} in your account and in order to reach your target,
 you need to be depositing (and probably growing) to our account.
 
-So far, you have to be depositing **{initial_annual_deposit_amount/12:.2f} ({initial_annual_deposit_amount:.2f} annual) per month** to your
+So far, you have to be depositing **{initial_annual_deposit_amount/12:.2f} per month** ({initial_annual_deposit_amount:.2f} annual) to your
 account and each turn of the year you should be growing that amount by {growth_pre_retirement*100:.2f}%.
 """)
 
