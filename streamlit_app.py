@@ -147,7 +147,7 @@ With today's cost of living standards, you would feel comfortable with a monthly
 That is an annual cost in today's terms of {annual_cost_now_net}.
 
 With an inflation rate at {inf_annual_post*100.0:.2f}% the net amount you will need as a first pension salary is {monthly_needed_at_retirement_net:.2f}.
-That is an annual amount of {annual_needed_at_retirement_net:.2f}. Since the retirement tax rate is {tax_rate*100.0:.2f}% the gross amount you will need
+That is an annual amount of {annual_needed_at_retirement_net:.2f}. Since the retirement tax rate is {tax_rate*100.0:.2f}%, the gross amount you will need
 to pay yourself the moment you start your retirement ({retirement_date}) should be {annual_needed_at_retirement_gross:.2f}.
 
 As you can see in the `CashFlows` part of the image below, an initial amount of {annual_needed_at_retirement_gross:.2f} needs to be paid to you at {retirement_date}.
@@ -165,6 +165,10 @@ a wooping amount of {pension_balance['InflatedOutflow'][-1]:.2f} :cold_sweat:.
 All these annual payments will need to be somehow financed, of cource! The second part of the graph below shows
 the optimal balance of your pension account at the beginning of each year.
 The amount shown per year is _after_ you have withdrawn your annual payment.
+
+On {retirement_date} you should have a total of {pension_balance.Balance[0]} :open_mouth:.
+The day before ({retirement_date-relativedelta(days=1)}) the balance should be {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f}.
+
 The last payment date is {terminal_date-relativedelta(years=1)}
 and if all goes ok you should see a 0 or even possitive amount in your account.
 """)
@@ -219,19 +223,23 @@ for year in pre_pension_balance.index:
 # assert pension_balance.Balance[0].round(2) + pension_balance.InflatedOutflow[0].round(2) == pre_pension_balance.Balance[-1].round(2) # The balance we have in the account when we first get into pension is after we have taken out the first pension payment 
 
 st.markdown(f"""
-Well well, we know that just the day before {retirement_date} we will need to have a total of {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f} in our
-pension account (Just the exact {retirement_date} we withdraw the first pension annual amount of {pension_balance.InflatedOutflow[0]:.2f} and we are left with {pension_balance.Balance[0]:.2f}). To achieve that, we need to be investing. We will do that by placing our money in an investment account which we estimate it will return an annual rate of
-{market_rate_pre_retirement*100.0:.2f}%. We also think that we should be growing our annual deposits to the pension account to account for the inflation (mostly).
+Well well, we know that just the day before {retirement_date} you will need to have a total of {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f} in your
+pension account (Just the exact {retirement_date} we withdraw the first pension annual amount of {pension_balance.InflatedOutflow[0]:.2f} and we are left with {pension_balance.Balance[0]:.2f}).
+
+To achieve this plan, we need to be investing. that is usually done by placing the money in an investment account
+which you estimate it will return an annual rate of {market_rate_pre_retirement*100.0:.2f}%.
+You also think that we should be growing your annual deposits to the pension account to account for the inflation (mostly).
 This growth is at {growth_pre_retirement*100:.2f}% per year.
 
-According to the information above, we would need a total of {pv_pension_most_resent_birthday:.2f} in our account as of {most_resent_birthday}. If we had that,
-and the market was in our favor for the years to come (at an annual {market_rate_pre_retirement*100.0:.2f}%) we wouldn't need to make any deposits to our account again
+According to the information above, you would need a total of {pv_pension_most_resent_birthday:.2f} in your account as of {most_resent_birthday}. If you had that,
+and the market was in your favor for the years to come (at an annual {market_rate_pre_retirement*100.0:.2f}%) you wouldn't need to make any deposits to your account again
 and retire properly at {retirement_date}.
 
-However, we only have {initial_amount_for_pension} and in order to reach our target, we need to be depositing (and probably growing) to our account.
+However, you already have {initial_amount_for_pension} in your account and in order to reach your target,
+you need to be depositing (and probably growing) to our account.
 
-So far, we have to be depositing {initial_annual_deposit_amount/12:.2f} ({initial_annual_deposit_amount:.2f} annual) per month to our account and each turn of the year we should be growing that amount by {growth_pre_retirement*100:.2f}%.
-
+So far, you have to be depositing **{initial_annual_deposit_amount/12:.2f} ({initial_annual_deposit_amount:.2f} annual) per month** to your
+account and each turn of the year you should be growing that amount by {growth_pre_retirement*100:.2f}%.
 """)
 
 fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
@@ -308,7 +316,7 @@ st.header("**Conclusion**")
 st.markdown(f"""I really hope you liked the calculator so far! 
 
 The next phase of such a simulation is to allow for variable market, inflation and growth rates.
-This way, we can model different scenarios and plan even better.
+This way, you can model different scenarios and plan even better.
 My aspiration is to create the next version soon!
 
 If you liked the content so far, buy me a coffee :wink:
