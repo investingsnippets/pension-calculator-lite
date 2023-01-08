@@ -23,7 +23,7 @@ st.set_page_config(
 """
 # Pension Planning Calculatior - Lite Version!
 
-In this version of the pension planning calculator we will see how your current financial status matches your pension expectations.
+In this version of the pension planning calculator we will see how your current pension savings status matches your pension expectations.
 
 It is, of course, obvious that noone can predict the future and as such the calculator/simulator allows you to tweak the options as you please.
 
