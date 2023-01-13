@@ -41,8 +41,8 @@ Let's start with your date of birth. That is, because we will base all our calcu
 
 Next, you insert the balance you have managed to accumulate so far in your pension account.
 
-> We will assume that this balance is as of your last birthday. It will help with our calculations. In the next, more advanced, version of this calculator
-we will be more specific about the amounts.
+> We will assume that this balance is as of your last birthday (If you want to be precice, try to estimate your balance at that time).
+> It will help with our calculations. In the next, more advanced, version of this calculator we will be more specific about the amounts.
 """
 
 personalInfo, expectations = st.columns(2)
