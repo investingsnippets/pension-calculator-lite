@@ -223,23 +223,22 @@ for year in pre_pension_balance.index:
 # assert pension_balance.Balance[0].round(2) + pension_balance.InflatedOutflow[0].round(2) == pre_pension_balance.Balance[-1].round(2) # The balance we have in the account when we first get into pension is after we have taken out the first pension payment 
 
 st.markdown(f"""
-Well well, we know that just the day before {retirement_date} you will need to have a total of {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f} in your
-pension account (Just the exact {retirement_date} we withdraw the first pension annual amount of {pension_balance.InflatedOutflow[0]:.2f} and we are left with {pension_balance.Balance[0]:.2f}).
+Well, we know that just the day before {retirement_date}, you will need to have a total of {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f} in your
+pension account (On the exact {retirement_date} you withdraw the first pension annual amount of {pension_balance.InflatedOutflow[0]:.2f} and you are left with {pension_balance.Balance[0]:.2f}).
 
-To achieve this plan, we need to be investing. that is usually done by placing the money in an investment account
-which you estimate it will return an annual rate of {market_rate_pre_retirement*100.0:.2f}%.
-You also think that we should be growing your annual deposits to the pension account to account for the inflation (mostly).
-This growth is at {growth_pre_retirement*100:.2f}% per year.
+To achieve this plan, you need to be investing. That is usually done by placing the money in an investment account.
+You estimate an annual rate of return of {market_rate_pre_retirement*100.0:.2f}% from your investments.
+You also think that you should be growing your annual deposits to your pension account by {growth_pre_retirement*100:.2f}% (to account for the inflation, at least).
 
 According to the information above, you would need a total of {pv_pension_most_resent_birthday:.2f} in your account as of {most_resent_birthday}. If you had that,
 and the market was in your favor for the years to come (at an annual {market_rate_pre_retirement*100.0:.2f}%) you wouldn't need to make any deposits to your account again
 and retire properly at {retirement_date}.
 
-However, you already have {initial_amount_for_pension} in your account and in order to reach your target,
-you need to be depositing (and probably growing) to our account.
+However, your current balance is {initial_amount_for_pension:.2f} and in order to reach your target,
+you will need to be depositing money to your account.
 
 So far, you have to be depositing **{initial_annual_deposit_amount/12:.2f} per month** ({initial_annual_deposit_amount:.2f} annual) to your
-account and each turn of the year you should be growing that amount by {growth_pre_retirement*100:.2f}%.
+account and each time you celebrate your next birthday you should be growing that amount by {growth_pre_retirement*100:.2f}% (what a costly celebration :gift: :stuck_out_tongue:).
 """)
 
 fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
