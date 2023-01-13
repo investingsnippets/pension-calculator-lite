@@ -260,6 +260,15 @@ st.plotly_chart(fig, use_container_width=True, theme="streamlit")
 
 st.header("**The full picture**")
 
+st.markdown(f"""
+In this section we will put everything together and show all the cashflows from now on until the end date,
+as well as the fluctuations in your account balance.
+
+Notice that the cashflows from your last birthday ({most_resent_birthday}) until the date before you retire ({retirement_date})
+are shown as negative. That is because you are paying from your pocket. While the cashflows after the retirement date are possitive,
+since you are adding money to your pocket.
+""")
+
 time_range_from_now_to_death = pd.to_datetime(pd.Series([f'{i}-{most_resent_birthday.month}-{most_resent_birthday.day}' for i in range(most_resent_birthday.year, terminal_date.year, 1)]),format='%Y-%m-%d')
 pension_plan = pd.DataFrame(index=time_range_from_now_to_death)
 pension_plan.index = pension_plan.index.date
@@ -312,7 +321,7 @@ st.plotly_chart(fig, use_container_width=True, theme="streamlit")
 
 st.header("**Conclusion**")
 
-st.markdown(f"""I really hope you liked the calculator so far! 
+st.markdown(f"""I really hope you liked the calculator so far!
 
 The next phase of such a simulation is to allow for variable market, inflation and growth rates.
 This way, you can model different scenarios and plan even better.
