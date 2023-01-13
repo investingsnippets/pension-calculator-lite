@@ -80,7 +80,7 @@ You have {years_to_retirement} years until you retire, and from that point on {c
 
 As of {most_resent_birthday} you have saved a total of {initial_amount_for_pension:.2f}.
 
-Let's move to the next section and try to understand what happens when you are in pension.
+Let's move on to the next section and visualise what will happen when you are in pension.
 """)
 
 st.header("**While In Pension**")
