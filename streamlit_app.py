@@ -88,7 +88,7 @@ st.markdown(f"""
 Imagine that you were going into retirement today! Based on the cost of living today,
 how much money per month would you be happy living with? Enter this amount in the `Monthly Pension Withdrawal` field.
 
-It's important to mention that due to the time value of money, \$1 today is worth more than $1 in a year from now. This is due to inflation.
+It's important to mention that due to the time value of money, \$1 today is worth more than \$1 in a year from now. This is due to inflation.
 For example, with an inflation rate of 10%, the same product you bought for \$1 today will cost \$1.10 in a year.
 
 The same applies to pensions. With an annual inflation rate of 5%, \$1 today will be worth \${1*(1+0.05)**years_to_retirement:.2f} when you retire :dizzy_face:!
