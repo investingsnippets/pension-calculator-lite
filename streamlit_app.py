@@ -327,7 +327,7 @@ The next phase of such a simulation is to allow for variable market, inflation a
 This way, you can model different scenarios and plan even better.
 My aspiration is to create the next version soon!
 
-If you liked the content so far, buy me a coffee :wink:
+If you liked the content so far, please consider buying me a coffee :wink:
 
 Enjoy!
 """)
