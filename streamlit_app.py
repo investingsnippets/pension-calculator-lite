@@ -25,11 +25,11 @@ st.set_page_config(
 
 In this version of the pension planning calculator we will see how your current pension savings status matches your pension expectations.
 
-It is, of course, obvious that noone can predict the future and as such the calculator/simulator allows you to tweak the options as you please.
+Of course, it is obvious that no one can predict the future, and as such, the calculator/simulator allows you to adjust the options as you please.
 
 The default options are not a recommendation or financial advice but just an example.
 
-> Note: None of the personal information provided to the calculator is saved in any way! The information will be lost when you refresh the page.
+> Note: None of the personal information provided to the calculator is saved in any way. The information will be lost when you refresh the page.
 
 Follow along each section below and enjoy the journey!
 """
@@ -42,7 +42,7 @@ Let's start with your date of birth. That is, because we will base all our calcu
 Next, you insert the balance you have managed to accumulate so far in your pension account.
 
 > We will assume that this balance is as of your last birthday (If you want to be precice, try to estimate your balance at that time).
-> It will help with our calculations. In the next, more advanced, version of this calculator we will be more specific about the amounts.
+> It will help with our calculations. In the next, more advanced, version of this calculator, we will be more specific about the amounts.
 """
 
 personalInfo, expectations = st.columns(2)
@@ -74,31 +74,31 @@ count_down_years = terminal_date.year - retirement_date.year
 
 st.markdown(f"""
 You were born {birth_date} and you celebrated your most recent birthday on {most_resent_birthday}.
-You plan to retire on {retirement_date} and eventually die (what a plan heh? :sweat_smile:) sometime in year {terminal_date}!
+You plan to retire on {retirement_date} and eventually pass away (what a plan, heh? :sweat_smile:) sometime in year {terminal_date}!
 
-You have {years_to_retirement} years until you retire, and from that point on {count_down_years} years more until the end of your pension plan.
+You have {years_to_retirement} years until you retire, and from that point, you have {count_down_years} years until the end of your pension plan.
 
-As of {most_resent_birthday} you have saved a total of {initial_amount_for_pension:.2f}.
+As of {most_resent_birthday}, you have saved a total of {initial_amount_for_pension:.2f}.
 
-Let's move on to the next section and visualise what will happen when you are in pension.
+Let's move on to the next section and visualise what will happen when you are in retirement.
 """)
 
 st.header("**While In Pension**")
 st.markdown(f"""
 Imagine that you were going into retirement today! Based on the cost of living today,
-how much money per month would you be happy living with? Add this amount in the `Monthly pension withdrawal` field.
+how much money per month would you be happy living with? Enter this amount in the `Monthly Pension Withdrawal` field.
 
-It is important to mention that due to the time value of money, 1\$ today costs more than 1\$ in a year from now. This is due to inflation!
-For example with an inflation of say 10% the same product that you bought for 1\$ today, you will buy it for 1.1\$ in a year.
+It's important to mention that due to the time value of money, \$1 today is worth more than $1 in a year from now. This is due to inflation.
+For example, with an inflation rate of 10%, the same product you bought for \$1 today will cost \$1.10 in a year.
 
-Same goes for pension, 1\$ today, with an annual inflation of 5%, will be worth {1*(1+0.05)**years_to_retirement:.2f}\$ when you retire :dizzy_face:!
+The same applies to pensions. With an annual inflation rate of 5%, \$1 today will be worth \${1*(1+0.05)**years_to_retirement:.2f} when you retire :dizzy_face:!
 
-Try it ...
+Try it out!
 """)
 colPostForecast1, colPostForecast2 = st.columns(2)
 
 with colPostForecast1:
-    st.subheader("Monthly pension withdrawal")
+    st.subheader("Monthly Pension Withdrawal")
     monthly_cost_now_net = st.number_input("Expected net monthly payment while in pension (in taday's terms): ", min_value=0.0, format='%f')
     
     st.subheader("Withdrawals Growth")
@@ -144,24 +144,24 @@ for year in pension_balance.index:
 
 st.markdown(f"""
 With today's cost of living standards, you would feel comfortable with a monthly pension payment of {monthly_cost_now_net:.2f}.
-That is an annual cost in today's terms of {annual_cost_now_net:.2f}.
+That is an annual cost, in today's terms, of {annual_cost_now_net:.2f}.
 
-With an inflation rate at {inf_annual_post*100.0:.2f}%, the net amount you will need as a first pension salary is {monthly_needed_at_retirement_net:.2f}.
+With an inflation rate of {inf_annual_post*100.0:.2f}%, the net amount you will need as a first pension salary is {monthly_needed_at_retirement_net:.2f}.
 That is an annual amount of {annual_needed_at_retirement_net:.2f}. Since the retirement tax rate is {tax_rate*100.0:.2f}%, the gross amount you will need
 to pay yourself the moment you start your retirement ({retirement_date}) should be {annual_needed_at_retirement_gross:.2f}.
 
-As you can see in the `CashFlows` part of the image below, an initial annual amount of {annual_needed_at_retirement_gross:.2f}
+As you can see in the `CashFlows` section of the image below, an initial annual amount of {annual_needed_at_retirement_gross:.2f}
 needs to be paid to you at {retirement_date}. Of cource, you will split it down to equal monthly payments throughout the year.
 However, on the `{retirement_date.month}-{retirement_date.day}` of each consecutive year, your total account balance should be able to 
 allow you to withdraw the annual amount you need and continue growing with the remaining balance.
 
-Now, due to inflation (mostly), to be able to keep the same quality of leaving while in pension, you will need to grow
-the annual amount you pay yourself by a growth rate. This rate is set to {growth_post_retirement*100.0:.2f}% every year.
+Now, due to inflation, to be able to keep the same quality of leaving while in pension, you will need to grow
+the annual amount you pay yourself by a growth rate. This rate is set to {growth_post_retirement*100.0:.2f}%.
 That means that at the beginning of the second year after retirement ({retirement_date+relativedelta(years=1)}) you will
 need to pay yourself {annual_needed_at_retirement_gross * (1+growth_post_retirement)**1:.2f},
 the third year ({retirement_date+relativedelta(years=2)}) {annual_needed_at_retirement_gross * (1+growth_post_retirement)**2:.2f} and so on.
 At the start of the terminal year ({terminal_date-relativedelta(years=1)}) you will need
-a wooping annual amount of {pension_balance['InflatedOutflow'][-1]:.2f} :cold_sweat:.
+an whopping annual amount of {pension_balance['InflatedOutflow'][-1]:.2f} :cold_sweat:.
 
 All these annual payments will need to be somehow financed, of cource! The second part of the graph below shows
 the optimal balance of your pension account at the beginning of each year.
@@ -170,7 +170,7 @@ The amount shown per year is _after_ you have withdrawn your annual payment.
 On {retirement_date} you should have a total of {pension_balance.Balance[0]:.2f} :open_mouth:.
 The day before ({retirement_date-relativedelta(days=1)}) the balance should be {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f}.
 
-The last payment date is on {terminal_date-relativedelta(years=1)} and you should see a 0 balance in your account (since you withdraw the last annual payment).
+The last payment date is on {terminal_date-relativedelta(years=1)}, and you should see a 0 balance in your account (since you withdrew the last annual payment).
 """)
 
 fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
@@ -224,21 +224,21 @@ for year in pre_pension_balance.index:
 
 st.markdown(f"""
 Well, we know that just the day before {retirement_date}, you will need to have a total of {pension_balance.Balance[0] + pension_balance.InflatedOutflow[0]:.2f} in your
-pension account (On the exact {retirement_date} you withdraw the first pension annual amount of {pension_balance.InflatedOutflow[0]:.2f} and you are left with {pension_balance.Balance[0]:.2f}).
+pension account. On {retirement_date} you will withdraw the first pension annual amount of {pension_balance.InflatedOutflow[0]:.2f}, leaving you with {pension_balance.Balance[0]:.2f}).
 
-To achieve this plan, you need to be investing. That is usually done by placing the money in an investment account.
+To achieve this plan, you need to invest. That is usually done by placing the money in an investment account.
 You estimate an annual rate of return of {market_rate_pre_retirement*100.0:.2f}% from your investments.
-You also think that you should be growing your annual deposits to your pension account by {growth_pre_retirement*100:.2f}% (to account for the inflation, at least).
+You also think that you should be increasing your annual deposits to your pension account by {growth_pre_retirement*100:.2f}% (to account for inflation, at least).
 
 According to the information above, you would need a total of {pv_pension_most_resent_birthday:.2f} in your account as of {most_resent_birthday}. If you had that,
-and the market was in your favor for the years to come (at an annual {market_rate_pre_retirement*100.0:.2f}%) you wouldn't need to make any deposits to your account again
-and retire properly at {retirement_date}.
+and the market was in your favor for the years to come (at an annual {market_rate_pre_retirement*100.0:.2f}%) you wouldn't need to make any more deposits to your
+account again and could retire properly on {retirement_date}.
 
-However, your current balance is {initial_amount_for_pension:.2f} and in order to reach your target,
+However, your current balance is {initial_amount_for_pension:.2f}, and in order to reach your target,
 you will need to be depositing money to your account.
 
 So far, you have to be depositing **{initial_annual_deposit_amount/12:.2f} per month** ({initial_annual_deposit_amount:.2f} annual) to your
-account and each time you celebrate your next birthday you should be growing that amount by {growth_pre_retirement*100:.2f}% (what a costly celebration :gift: :stuck_out_tongue:).
+account, and each time you celebrate your next birthday, you should be increasing that amount by {growth_pre_retirement*100:.2f}% (what a costly celebration :gift: :stuck_out_tongue:).
 """)
 
 fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
@@ -261,12 +261,12 @@ st.plotly_chart(fig, use_container_width=True, theme="streamlit")
 st.header("**The full picture**")
 
 st.markdown(f"""
-In this section we will put everything together and show all the cashflows from now on until the end date,
+In this section, we will put everything together and show all the cash flows from now until the end date,
 as well as the fluctuations in your account balance.
 
 Notice that the cashflows from your last birthday ({most_resent_birthday}) until the date before you retire ({retirement_date})
-are shown as negative. That is because you are paying from your pocket. While the cashflows after the retirement date are possitive,
-since you are adding money to your pocket.
+are shown as negative. That is because you are paying from your own pocket. While the cashflows after the retirement date are possitive,
+since you are adding money to your own pocket.
 """)
 
 time_range_from_now_to_death = pd.to_datetime(pd.Series([f'{i}-{most_resent_birthday.month}-{most_resent_birthday.day}' for i in range(most_resent_birthday.year, terminal_date.year, 1)]),format='%Y-%m-%d')
