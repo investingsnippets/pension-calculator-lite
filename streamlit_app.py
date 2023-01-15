@@ -102,17 +102,17 @@ with colPostForecast1:
     monthly_cost_now_net = st.number_input("Expected net monthly payment while in pension (in taday's terms): ", min_value=0.0, format='%f')
     
     st.subheader("Withdrawals Growth")
-    growth_post_retirement = st.number_input("Annual growth of your withdrawals(%): ", min_value=0.0, format='%f', value=3.35747)
+    growth_post_retirement = st.number_input("Annual growth of your withdrawals (%): ", min_value=0.0, format='%f', value=3.35747)
     
     st.subheader("Tax Rate while in Pension")
-    tax_rate = st.number_input("Enter your tax rate(%): ", min_value=0.0, format='%f')
+    tax_rate = st.number_input("Enter your tax rate (%): ", min_value=0.0, format='%f')
 
 with colPostForecast2:
     st.subheader("Inflation Rate")
-    inf_annual_post = st.number_input("Annualized inflation rate(%): ", min_value=0.0, format='%f', value=3.35747)
+    inf_annual_post = st.number_input("Annualized inflation rate (%): ", min_value=0.0, format='%f', value=3.35747)
     
-    st.subheader("Post-Retirement Market Rate")
-    market_rate_post_retirement = st.number_input("Annualized market rate post(%): ", min_value=0.0, format='%f', value=5.26)
+    st.subheader("Market Rate")
+    market_rate_post_retirement = st.number_input("Annualized market rate (%): ", min_value=0.0, format='%f', value=5.26)
 
 tax_rate = tax_rate / 100.0
 growth_post_retirement = growth_post_retirement / 100.0
@@ -198,8 +198,8 @@ with colPreForecast1:
     growth_pre_retirement = st.number_input("Annual growth of your deposits(%): ", min_value=0.0, format='%f', value=3.35747)
 
 with colPreForecast2:
-    st.subheader("Pre-Retirement Market Rate")
-    market_rate_pre_retirement = st.number_input("Annualized market rate pre(%): ", min_value=0.0, format='%f', value=5.26)
+    st.subheader("Market Rate")
+    market_rate_pre_retirement = st.number_input("Annualized market rate (%): ", min_value=0.0, format='%f', value=5.26)
 
 growth_pre_retirement = growth_pre_retirement / 100.0
 market_rate_pre_retirement = market_rate_pre_retirement / 100.0
