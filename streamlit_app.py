@@ -58,8 +58,8 @@ with expectations:
     st.subheader("Retirement Age")
     retirement_age = st.selectbox('When do you plan to Retire?', tuple(i for i in range(55,75,1)), index=10)
     
-    st.subheader("Estimated Death Age")
-    life_expectancy = st.selectbox('When do you estimate to die?', tuple(i for i in range(55,115,1)), index=45)
+    st.subheader("Estimated Life Expectancy")
+    life_expectancy = st.selectbox('Pension plan end year?', tuple(i for i in range(55,115,1)), index=45)
 
 today_date = datetime.now().date()
 this_year_birthday = today_date.replace(month=birth_date.month, day=birth_date.day)
