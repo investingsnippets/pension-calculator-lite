@@ -27,7 +27,7 @@ In this version of the pension planning calculator we will see how your current 
 
 Of course, it is obvious that no one can predict the future, and as such, the calculator/simulator allows you to adjust the options as you please.
 
-_The default options are not a recommendation or financial advice but just an example._
+*_The default options are not a recommendation or financial advice but just an example._*
 
 > Note: None of the personal information provided to the calculator is saved in any way. The information will be lost when you refresh the page.
 
