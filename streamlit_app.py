@@ -9,59 +9,79 @@ from tmval import Annuity, Rate
 import numpy_financial as npf
 
 def pmnt_growing_annuity(pv, rate, growth, periods):
+    assert rate!=growth, "rate must not equal growht!"
     return pv/((1/(rate-growth))*(1- ((1+growth)/(1+rate))**periods))
 
 def pv_growing_annuity(pmnt, rate, growth, periods):
+    assert rate!=growth, "rate must not equal growht!"
     return pmnt * ((1/(rate-growth))*(1 - ((1+growth)/(1+rate))**periods))
 
 def pv_growing_annuity_due(pmnt, rate, growth, periods):
+    assert rate!=growth, "rate must not equal growht!"
     return pmnt * (1+rate) * ((1/(rate-growth))*(1 - ((1+growth)/(1+rate))**periods))
 
 st.set_page_config(
-    page_title="Pension Planning Calculator")
+    page_title="Pension Planning Calculator",
+    layout="wide")
+
+st.markdown("<h1 style='text-align: center; color: black;'>Pension Planning Calculatior</h1>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: grey;'>Lite Version!</h2>", unsafe_allow_html=True)
 
 """
-# Pension Planning Calculatior - Lite Version!
-
-In this version of the pension planning calculator we will see how your current pension savings status matches your pension expectations.
-
-Of course, it is obvious that no one can predict the future, and as such, the calculator/simulator allows you to adjust the options as you please.
-
-**_The default options are not a recommendation or financial advice but just an example._**
+**_The content, opinions and conclusions on this website are NOT to be construed as financial advice. Please change the inputs according to your belief._**
 
 > Note: None of the personal information provided to the calculator is saved in any way. The information will be lost when you refresh the page.
-
-Follow along each section below and enjoy the journey!
 """
 
-st.header("**Current Financial Situation**")
+inf_annual_post=growth_post_retirement=growth_post_retirement=0
+tax_rate=0.0
+market_rate_pre_retirement=market_rate_post_retirement=0
 
-"""
-Let's start with your date of birth. That is, because we will base all our calculations on this date.
+with st.sidebar:
+    st.sidebar.title("Parameters")
+    monthly_cost_now_net = st.number_input("Expected net monthly payment while in pension (in today's terms): ", min_value=0.0, format='%f', help=
+        """As if today was your first day at retirement! Based on today's cost of living,
+        how much money per month would you be happy living with?""")
 
-Next, you insert the balance you have managed to accumulate so far in your pension account.
-
+    initial_amount_for_pension = st.number_input("Current Balance:", min_value=0.0, format='%f', help="""The balance you have managed to accumulate so far in your pension account.
 > We will assume that this balance is as of your last birthday (If you want to be precice, try to estimate your balance at that time).
 > It will help with our calculations. In the next, more advanced, version of this calculator, we will be more specific about the amounts.
-"""
+""")
 
-personalInfo, expectations = st.columns(2)
+    birth_date = st.date_input("Birth Date:", datetime(1980, 1, 1).date(), help="We use that to show nicer graphs")
 
-with personalInfo:
-    st.subheader("Birth Date")
-    birth_date = st.date_input("When\'s your birthday", datetime(1982, 4, 20).date())
-    
-    st.subheader("Current Balance")
-    initial_amount_for_pension = st.number_input("The current amount in your pension plan: ", min_value=0.0, format='%f')
+    retirement_age = st.selectbox('Retirement Age:', tuple(i for i in range(55,75,1)), index=10, help="At what age do you plan to retire?")
 
-with expectations:
-    st.subheader("Retirement Age")
-    retirement_age = st.selectbox('When do you plan to Retire?', tuple(i for i in range(55,75,1)), index=10)
-    
-    st.subheader("Estimated Life Expectancy")
-    life_expectancy = st.selectbox('Pension plan end year?', tuple(i for i in range(55,115,1)), index=45)
+    market_rate_pre_retirement = st.number_input("Pre-Retirement Return (%): ", min_value=0.0, format='%f', value=5.26, help="""What is the annualized return on your pension porfolio?
+For example, if you have invested all your portfolio in an index fund, that could be the annualized return of the fund for the last 10 years.
+**Keep in mind that Historical returns are no guarantee of future returns!**""")
+
+    growth_pre_retirement = st.number_input("Annual growth of your deposits (%): ", min_value=0.0, format='%f', value=3.35747, help="""The percentage in growth of your deposits per year.
+For example, one could increase as much as the inflation increases.""")
+
+    life_expectancy = st.selectbox('Terminal Year:', tuple(i for i in range(55,115,1)), index=45, help="When do you estimate to stop withdrawing from your pension account?")
+
+    tax_rate = st.number_input("Post-Retirement Tax Rate (%): ", min_value=0.0, format='%f', help="""Usually the gross amount you get paid by your pension account each month is taxed!""")
+
+    market_rate_post_retirement = st.number_input("Post-Retirement Return (%): ", min_value=0.0, format='%f', value=5.26, help="""What is the annualized return on your pension porfolio?
+For example, if you have invested all your portfolio in an index fund, that could be the annualized return of the fund for the last 10 years.
+**Keep in mind that Historical returns are no guarantee of future returns!**""")
+
+    growth_post_retirement = st.number_input("Annual growth of your withdrawals (%): ", min_value=0.0, format='%f', value=3.35747, help="""The percentage in growth of your withdrawals per year.
+For example, one could increase as much as the inflation increases.""")
+
+    inf_annual_post = st.number_input("Annualized Inflation Rate (%): ", min_value=0.0, format='%f', value=3.35747)
+
+if market_rate_pre_retirement == growth_pre_retirement:
+    st.error("""Error! `Pre-Retirement Return` must be different than `Annual growth of your deposits`""")
+    st.stop()
+
+if market_rate_post_retirement == growth_post_retirement:
+    st.error("""Error! `Post-Retirement Return` must be different than `Annual growth of your withdrawals`""")
+    st.stop()
 
 today_date = datetime.now().date()
+age = today_date.year - birth_date.year - ((today_date.month, today_date.day) < (birth_date.month, birth_date.day))
 this_year_birthday = today_date.replace(month=birth_date.month, day=birth_date.day)
 next_year_birthday = this_year_birthday + relativedelta(years=1)
 most_resent_birthday = this_year_birthday - relativedelta(years=1) if today_date < this_year_birthday else this_year_birthday
@@ -72,9 +92,87 @@ years_to_retirement = retirement_date.year - most_resent_birthday.year
 terminal_date = birth_date + relativedelta(years=life_expectancy)
 count_down_years = terminal_date.year - retirement_date.year
 
+tax_rate = tax_rate / 100.0
+growth_post_retirement = growth_post_retirement / 100.0
+inf_annual_post = inf_annual_post / 100.0
+market_rate_post_retirement = market_rate_post_retirement / 100.0
+growth_pre_retirement = growth_pre_retirement / 100.0
+market_rate_pre_retirement = market_rate_pre_retirement / 100.0
+
+annual_cost_now_net = 12 * monthly_cost_now_net
+monthly_needed_at_retirement_net = monthly_cost_now_net * (1+inf_annual_post)**years_to_retirement
+annual_needed_at_retirement_net = monthly_needed_at_retirement_net * 12
+annual_needed_at_retirement_gross = annual_needed_at_retirement_net * (1 + tax_rate)
+
+
+pv_pension_growing_annuity = Annuity(gr=Rate(market_rate_post_retirement), n=count_down_years, gprog=(growth_post_retirement)).pv() * annual_needed_at_retirement_gross
+
+pv_pension_most_resent_birthday = pv_pension_growing_annuity /(1+market_rate_pre_retirement)**(years_to_retirement-1)
+initial_annual_deposit_amount = pmnt_growing_annuity(pv_pension_most_resent_birthday - initial_amount_for_pension, market_rate_pre_retirement, growth_pre_retirement, years_to_retirement)
+initial_annual_deposit_amount = initial_annual_deposit_amount if initial_annual_deposit_amount >= 0 else -1
+
+time_range_from_now_to_death = pd.to_datetime(pd.Series([f'{i}-{most_resent_birthday.month}-{most_resent_birthday.day}' for i in range(most_resent_birthday.year, terminal_date.year, 1)]),format='%Y-%m-%d')
+pension_plan = pd.DataFrame(index=time_range_from_now_to_death)
+pension_plan.index = pension_plan.index.date
+pension_plan['Age'] = [age + i for i in range(0, pension_plan.shape[0])]
+pension_plan['Growth'] = [0,1] + [1+growth_pre_retirement] * (years_to_retirement-2) + [1+growth_post_retirement] * count_down_years
+pension_plan['Rate'] = [1+market_rate_pre_retirement] * years_to_retirement + [1+market_rate_post_retirement] * count_down_years
+pension_plan['Balance'] = np.zeros(pension_plan.shape[0])
+pension_plan['CF'] = np.zeros(pension_plan.shape[0])
+previous_year_cf_pre_retirement = -initial_annual_deposit_amount
+previous_year_cf_post_retirement = annual_needed_at_retirement_gross
+previous_year_balance_amount = 0
+for year in pension_plan.index:
+    rate = pension_plan.Rate[year]
+    growth = pension_plan.Growth[year]
+    if year == most_resent_birthday: # Initial Lump sum
+        pension_plan.CF.loc[year] = -initial_amount_for_pension
+        previous_year_balance_amount = pension_plan.Balance.loc[year] = initial_amount_for_pension
+        continue
+    if year < retirement_date:
+        previous_year_cf_pre_retirement = pension_plan.CF.loc[year] = previous_year_cf_pre_retirement * growth
+        previous_year_balance_amount = pension_plan.Balance.loc[year] = abs(previous_year_balance_amount) * rate + abs(pension_plan.CF[year])
+        continue
+    if year == retirement_date:
+        pension_plan.CF.loc[year] = annual_needed_at_retirement_gross + (previous_year_cf_pre_retirement * growth)
+        previous_year_balance_amount = pension_plan.Balance.loc[year] = (abs(previous_year_balance_amount) * rate) + abs(previous_year_cf_pre_retirement * growth) - annual_needed_at_retirement_gross
+        continue
+    if year > retirement_date:
+        previous_year_cf_post_retirement = pension_plan.CF.loc[year] = previous_year_cf_post_retirement * growth
+        previous_year_balance_amount = pension_plan.Balance.loc[year] = (abs(previous_year_balance_amount) * rate) - pension_plan.CF[year]
+        continue
+
+st.header("**Do you save enough?**")
+if initial_annual_deposit_amount/12 >= 0:
+    st.markdown(f"""<h2 style='text-align: center; color: black;'>You should be saving {initial_annual_deposit_amount/12:.2f} per month</h2>""", unsafe_allow_html=True)
+else:
+    st.markdown(f"""<h2 style='text-align: center; color: black;'>No need to save more! Good to go with the existing balance!</h2>""", unsafe_allow_html=True)
+
+fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
+fig.add_trace(
+    go.Bar(x=pension_plan.Age, y=pension_plan.CF),
+    row=1, col=1
+)
+
+fig.add_trace(
+    go.Bar(x=pension_plan.Age, y=pension_plan.Balance),
+    row=2, col=1
+)
+
+fig.update_layout(height=1000,
+                  title_text='',
+                  title_x=0.5,
+                  showlegend=False)
+fig.update_xaxes(title_text="Age", tickmode='linear')
+fig.update_yaxes(title_text="Amount", row=1, col=1)
+fig.update_yaxes(title_text="Amount", row=2, col=1)
+st.plotly_chart(fig, use_container_width=True, theme="streamlit")
+
+st.header("**Current Financial Situation**")
+
 st.markdown(f"""
 You were born {birth_date} and you celebrated your most recent birthday on {most_resent_birthday}.
-You plan to retire on {retirement_date} and eventually pass away (what a plan, heh? :sweat_smile:) sometime in year {terminal_date}!
+You plan to retire on {retirement_date} and continue withdrawing from your pension account sometime in year {terminal_date.year}!
 
 You have {years_to_retirement} years until you retire, and from that point, you have {count_down_years} years until the end of your pension plan.
 
@@ -84,52 +182,13 @@ Let's move on to the next section and visualise what will happen when you are in
 """)
 
 st.header("**While In Pension**")
-st.markdown(f"""
-Imagine that you were going into retirement today! Based on the cost of living today,
-how much money per month would you be happy living with? Enter this amount in the `Monthly Pension Withdrawal` field.
-
-It's important to mention that due to the time value of money, \$1 today is worth more than \$1 in a year from now. This is due to inflation.
-For example, with an inflation rate of 10%, the same product you bought for \$1 today will cost \$1.10 in a year.
-
-The same applies to pensions. With an annual inflation rate of 5%, \$1 today will be worth \${1*(1+0.05)**years_to_retirement:.2f} when you retire :dizzy_face:!
-
-Try it out!
-""")
-colPostForecast1, colPostForecast2 = st.columns(2)
-
-with colPostForecast1:
-    st.subheader("Monthly Pension Withdrawal")
-    monthly_cost_now_net = st.number_input("Expected net monthly payment while in pension (in taday's terms): ", min_value=0.0, format='%f')
-    
-    st.subheader("Withdrawals Growth")
-    growth_post_retirement = st.number_input("Annual growth of your withdrawals (%): ", min_value=0.0, format='%f', value=3.35747)
-    
-    st.subheader("Tax Rate while in Pension")
-    tax_rate = st.number_input("Enter your tax rate (%): ", min_value=0.0, format='%f')
-
-with colPostForecast2:
-    st.subheader("Inflation Rate")
-    inf_annual_post = st.number_input("Annualized inflation rate (%): ", min_value=0.0, format='%f', value=3.35747)
-    
-    st.subheader("Market Rate")
-    market_rate_post_retirement = st.number_input("Annualized market rate post-retirement (%): ", min_value=0.0, format='%f', value=5.26)
-
-tax_rate = tax_rate / 100.0
-growth_post_retirement = growth_post_retirement / 100.0
-inf_annual_post = inf_annual_post / 100.0
-market_rate_post_retirement = market_rate_post_retirement / 100.0
-
-annual_cost_now_net = 12 * monthly_cost_now_net
-monthly_needed_at_retirement_net = monthly_cost_now_net * (1+inf_annual_post)**years_to_retirement
-annual_needed_at_retirement_net = monthly_needed_at_retirement_net * 12
-annual_needed_at_retirement_gross = annual_needed_at_retirement_net * (1 + tax_rate)
 
 time_range_from_retirement_to_death = pd.to_datetime(pd.Series([f'{retirement_date.year + i}-{retirement_date.month}-{retirement_date.day}' for i in range(0,terminal_date.year-retirement_date.year,1)]),format='%Y-%m-%d')
 pension_balance = pd.DataFrame(data=[annual_needed_at_retirement_gross]*time_range_from_retirement_to_death.shape[0], columns=["Outflow"], index=time_range_from_retirement_to_death)
+pension_balance['Age'] = [age+years_to_retirement + i for i in range(0, pension_balance.shape[0])]
 pension_balance['InflationFactor'] = pd.Series([(1+growth_post_retirement)**i for i in range(0, time_range_from_retirement_to_death.shape[0], 1)]).values
 pension_balance['InflatedOutflow'] = pension_balance['InflationFactor'] * pension_balance['Outflow']
 assert annual_needed_at_retirement_gross * (1+growth_post_retirement)**(time_range_from_retirement_to_death.shape[0]-1) == pension_balance['InflatedOutflow'][-1]
-pv_pension_growing_annuity = Annuity(gr=Rate(market_rate_post_retirement), n=time_range_from_retirement_to_death.shape[0], gprog=(growth_post_retirement)).pv() * annual_needed_at_retirement_gross
 pension_balance['Rate'] = [market_rate_post_retirement] * pension_balance.shape[0]
 pension_balance['Balance'] = np.ones(pension_balance.shape[0])
 previous_year_balance = pv_pension_growing_annuity
@@ -138,11 +197,12 @@ for year in pension_balance.index:
     rate = pension_balance.Rate[year]
     previous_year_balance = pension_balance.Balance[year] = (previous_year_balance * (1+rate)) - withdrawn_amount
 
-# assert pension_balance.Balance[-1].round(6) == 0
-# assert (pension_balance.Balance[-2] * (1+market_rate_post_retirement)).round(6) == pension_balance.InflatedOutflow[-1].round(6)
-
-
 st.markdown(f"""
+It's important to mention that due to the time value of money, \$1 today is worth more than \$1 in a year from now. This is due to inflation.
+For example, with an inflation rate of 10%, the same product you bought for \$1 today will cost \$1.10 in a year.
+
+The same applies to pensions. With an annual inflation rate of 5%, \$1 today will be worth \${1*(1+0.05)**years_to_retirement:.2f} when you retire :dizzy_face:!
+
 With today's cost of living standards, you would feel comfortable with a monthly pension payment of {monthly_cost_now_net:.2f}.
 That is an annual cost, in today's terms, of {annual_cost_now_net:.2f}.
 
@@ -175,51 +235,22 @@ The last payment date is on {terminal_date-relativedelta(years=1)}, and you shou
 
 fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
 fig.add_trace(
-    go.Bar(x=pension_balance.index, y=pension_balance.InflatedOutflow),
+    go.Bar(x=pension_balance.Age, y=pension_balance.InflatedOutflow),
     row=1, col=1
 )
 
 fig.add_trace(
-    go.Bar(x=pension_balance.index, y=pension_balance.Balance),
+    go.Bar(x=pension_balance.Age, y=pension_balance.Balance),
     row=2, col=1
 )
 
 fig.update_layout(height=1000, title_text="Retirement CFs & Balance", showlegend=False)
-fig.update_xaxes(title_text="Date")
+fig.update_xaxes(title_text="Age", tickmode='linear')
 fig.update_yaxes(title_text="Amount", row=1, col=1)
 fig.update_yaxes(title_text="Amount", row=2, col=1)
 st.plotly_chart(fig, use_container_width=True, theme="streamlit")
 
 st.header("**The path towards retirement**")
-colPreForecast1, colPreForecast2 = st.columns(2)
-
-with colPreForecast1:
-    st.subheader("Deposit Growth")
-    growth_pre_retirement = st.number_input("Annual growth of your deposits(%): ", min_value=0.0, format='%f', value=3.35747)
-
-with colPreForecast2:
-    st.subheader("Market Rate")
-    market_rate_pre_retirement = st.number_input("Annualized market rate pre-retirement (%): ", min_value=0.0, format='%f', value=5.26)
-
-growth_pre_retirement = growth_pre_retirement / 100.0
-market_rate_pre_retirement = market_rate_pre_retirement / 100.0
-
-pv_pension_most_resent_birthday = pv_pension_growing_annuity /(1+market_rate_pre_retirement)**(years_to_retirement-1)
-initial_annual_deposit_amount = pmnt_growing_annuity(pv_pension_most_resent_birthday - initial_amount_for_pension, market_rate_pre_retirement, growth_pre_retirement, years_to_retirement)
-
-time_range_from_now_to_retirement = pd.to_datetime(pd.Series([f'{i}-{retirement_date.month}-{retirement_date.day}' for i in range(most_resent_birthday.year, retirement_date.year+1,1)]),format='%Y-%m-%d')
-pre_pension_balance = pd.DataFrame(data=[-initial_amount_for_pension] + [-initial_annual_deposit_amount * (1+growth_pre_retirement)** i for i in range(0, time_range_from_now_to_retirement.shape[0]-1, 1)], columns=["Depositions"], index=time_range_from_now_to_retirement)
-pre_pension_balance['Rate'] = [1+market_rate_pre_retirement] * pre_pension_balance.shape[0]
-pre_pension_balance['Balance'] = np.zeros(pre_pension_balance.shape[0])
-previous_year_amount = 0
-for year in pre_pension_balance.index:
-    depo = pre_pension_balance.Depositions[year]
-    rate = pre_pension_balance.Rate[year]
-    if year == most_resent_birthday:
-        previous_year_amount = pre_pension_balance.Balance[year] = - depo
-        continue
-    previous_year_amount = pre_pension_balance.Balance[year] = previous_year_amount*rate - depo
-
 # assert pension_balance.Balance[0].round(2) + pension_balance.InflatedOutflow[0].round(2) == pre_pension_balance.Balance[-1].round(2) # The balance we have in the account when we first get into pension is after we have taken out the first pension payment 
 
 st.markdown(f"""
@@ -241,80 +272,33 @@ So far, you have to be depositing **{initial_annual_deposit_amount/12:.2f} per m
 account, and each time you celebrate your next birthday, you should be increasing that amount by {growth_pre_retirement*100:.2f}% (what a costly celebration :gift: :stuck_out_tongue:).
 """)
 
+time_range_from_now_to_retirement = pd.to_datetime(pd.Series([f'{i}-{retirement_date.month}-{retirement_date.day}' for i in range(most_resent_birthday.year, retirement_date.year+1,1)]),format='%Y-%m-%d')
+pre_pension_balance = pd.DataFrame(data=[-initial_amount_for_pension] + [-initial_annual_deposit_amount * (1+growth_pre_retirement)** i for i in range(0, time_range_from_now_to_retirement.shape[0]-1, 1)], columns=["Depositions"], index=time_range_from_now_to_retirement)
+pre_pension_balance['Age'] = [age + i for i in range(0, pre_pension_balance.shape[0])]
+pre_pension_balance['Rate'] = [1+market_rate_pre_retirement] * pre_pension_balance.shape[0]
+pre_pension_balance['Balance'] = np.zeros(pre_pension_balance.shape[0])
+previous_year_amount = 0
+for year in pre_pension_balance.index:
+    depo = pre_pension_balance.Depositions[year]
+    rate = pre_pension_balance.Rate[year]
+    if year == most_resent_birthday:
+        previous_year_amount = pre_pension_balance.Balance[year] = - depo
+        continue
+    previous_year_amount = pre_pension_balance.Balance[year] = previous_year_amount*rate - depo
+
 fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
 fig.add_trace(
-    go.Bar(x=pre_pension_balance.index, y=pre_pension_balance.Depositions),
+    go.Bar(x=pre_pension_balance.Age, y=pre_pension_balance.Depositions),
     row=1, col=1
 )
 
 fig.add_trace(
-    go.Bar(x=pre_pension_balance.index, y=pre_pension_balance.Balance),
+    go.Bar(x=pre_pension_balance.Age, y=pre_pension_balance.Balance),
     row=2, col=1
 )
 
 fig.update_layout(height=1000, title_text="Pre-Retirement CFs & Balance", showlegend=False)
-fig.update_xaxes(title_text="Date")
-fig.update_yaxes(title_text="Amount", row=1, col=1)
-fig.update_yaxes(title_text="Amount", row=2, col=1)
-st.plotly_chart(fig, use_container_width=True, theme="streamlit")
-
-st.header("**The full picture**")
-
-st.markdown(f"""
-In this section, we will put everything together and show all the cash flows from now until the end date,
-as well as the fluctuations in your account balance.
-
-Notice that the cashflows from your last birthday ({most_resent_birthday}) until the date before you retire ({retirement_date})
-are shown as negative. That is because you are paying from your own pocket. While the cashflows after the retirement date are possitive,
-since you are adding money to your own pocket.
-""")
-
-time_range_from_now_to_death = pd.to_datetime(pd.Series([f'{i}-{most_resent_birthday.month}-{most_resent_birthday.day}' for i in range(most_resent_birthday.year, terminal_date.year, 1)]),format='%Y-%m-%d')
-pension_plan = pd.DataFrame(index=time_range_from_now_to_death)
-pension_plan.index = pension_plan.index.date
-pension_plan['Growth'] = [0,1] + [1+growth_pre_retirement] * (pre_pension_balance.shape[0]-2) + [1+growth_post_retirement] * (pension_balance.shape[0]-1)
-pension_plan['Rate'] = [1+market_rate_pre_retirement] * pre_pension_balance.shape[0] + [1+market_rate_post_retirement] * (pension_balance.shape[0]-1)
-pension_plan['Balance'] = np.zeros(pension_plan.shape[0])
-pension_plan['CF'] = np.zeros(pension_plan.shape[0])
-previous_year_cf_pre_retirement = -initial_annual_deposit_amount
-previous_year_cf_post_retirement = annual_needed_at_retirement_gross
-previous_year_balance_amount = 0
-for year in pension_plan.index:
-    rate = pension_plan.Rate[year]
-    growth = pension_plan.Growth[year]
-    if year == most_resent_birthday: # Initial Lump sum
-        pension_plan.CF.loc[year] = -initial_amount_for_pension
-        previous_year_balance_amount = pension_plan.Balance.loc[year] = initial_amount_for_pension
-        continue
-    if year < retirement_date:
-        previous_year_cf_pre_retirement = pension_plan.CF.loc[year] = previous_year_cf_pre_retirement * growth
-        previous_year_balance_amount = pension_plan.Balance.loc[year] = abs(previous_year_balance_amount) * rate + abs(pension_plan.CF[year])
-        continue
-    if year == retirement_date:
-        pension_plan.CF.loc[year] = annual_needed_at_retirement_gross + (previous_year_cf_pre_retirement * growth)
-        previous_year_balance_amount = pension_plan.Balance.loc[year] = (abs(previous_year_balance_amount) * rate) + abs(previous_year_cf_pre_retirement * growth) - annual_needed_at_retirement_gross
-        continue
-    if year > retirement_date:
-        previous_year_cf_post_retirement = pension_plan.CF.loc[year] = previous_year_cf_post_retirement * growth
-        previous_year_balance_amount = pension_plan.Balance.loc[year] = (abs(previous_year_balance_amount) * rate) - pension_plan.CF[year]
-        continue
-
-fig = make_subplots(rows=2, cols=1, subplot_titles=("CashFlows", "Account Balance"))
-fig.add_trace(
-    go.Bar(x=pension_plan.index, y=pension_plan.CF),
-    row=1, col=1
-)
-
-fig.add_trace(
-    go.Bar(x=pension_plan.index, y=pension_plan.Balance),
-    row=2, col=1
-)
-
-fig.update_layout(height=1000,
-                  title_text='CashFlow and Balance forecasting',
-                  title_x=0.5,
-                  showlegend=False)
-fig.update_xaxes(title_text="Date")
+fig.update_xaxes(title_text="Age", tickmode='linear')
 fig.update_yaxes(title_text="Amount", row=1, col=1)
 fig.update_yaxes(title_text="Amount", row=2, col=1)
 st.plotly_chart(fig, use_container_width=True, theme="streamlit")
