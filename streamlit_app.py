@@ -150,7 +150,7 @@ for year in pension_plan.index:
 
 st.header("**Do you save enough?**")
 if initial_annual_deposit_amount/12 >= 0:
-    st.markdown(f"""<h2 style='text-align: center; color: black;'>You should be saving {initial_annual_deposit_amount/12:.2f} per month</h2>""", unsafe_allow_html=True)
+    st.markdown(f"""<h2 style='text-align: center; color: black;'>You should be saving at least {initial_annual_deposit_amount/12:.2f} per month</h2>""", unsafe_allow_html=True)
 else:
     st.markdown(f"""<h2 style='text-align: center; color: black;'>No need to save more! Good to go with the existing balance!</h2>""", unsafe_allow_html=True)
 
